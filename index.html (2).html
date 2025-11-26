@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Placement Guidance Project</title>
+  <style>
+    :root{--bg:#f4f4f4;--card:#fff;--dark:#333;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:0;background:var(--bg);color:var(--dark)}
+    header{background:var(--dark);color:#fff;padding:16px;text-align:center;font-size:20px}
+    nav{background:#444;padding:10px;display:flex;justify-content:center;gap:18px}
+    nav a{color:#fff;text-decoration:none;font-weight:600;cursor:pointer}
+    .container{padding:20px;max-width:900px;margin:18px auto}
+    section{display:none;background:var(--card);padding:18px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    h2{margin-top:0}
+    .chat-box{border:1px solid #ddd;padding:10px;height:260px;overflow-y:auto;background:#fafafa}
+    .chat-row{margin:6px 0}
+    .chat-row b{display:inline-block;width:45px}
+    .chat-input{width:100%;padding:10px;margin-top:10px;border:1px solid #ddd;border-radius:6px}
+    .controls{display:flex;gap:10px;margin-top:10px}
+    .btn{padding:10px 14px;background:var(--dark);color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .muted{color:var(--muted);font-size:14px}
+    ul{line-height:1.7}
+    .feature-list{margin-top:10px}
+    .feature-item{margin:6px 0}
+  </style>
+</head>
+<body>
+  <header>Placement Guidance Website</header>
+  <nav>
+    <a onclick="show('roadmap')">Roadmap</a>
+    <a onclick="show('questions')">Question Bank</a>
+    <a onclick="show('resume')">Resume Tips</a>
+    <a onclick="show('chatbot')">Chatbot</a>
+    <a onclick="show('resources')">Resources</a>
+    <a onclick="show('practice')">Practice Tracker</a>
+  </nav>
+
+  <div class="container">
+    <section id="roadmap">
+      <h2>Career Roadmap</h2>
+      <ul class="feature-list">
+        <li class="feature-item">Learn Programming Basics (C, C++, Java, Python)</li>
+        <li class="feature-item">Data Structures & Algorithms</li>
+        <li class="feature-item">Object-Oriented Programming</li>
+        <li class="feature-item">Database Management Systems</li>
+        <li class="feature-item">Operating Systems</li>
+        <li class="feature-item">Computer Networks</li>
+        <li class="feature-item">Build 2–3 Projects (1 Major + 2 Minor)</li>
+        <li class="feature-item">Practice Coding on LeetCode / CodeStudio</li>
+      </ul>
+    </section>
+
+    <section id="questions">
+      <h2>Interview Question Bank</h2>
+      <ul class="feature-list">
+        <li class="feature-item">What is OOP? Explain its principles.</li>
+        <li class="feature-item">Explain polymorphism with examples.</li>
+        <li class="feature-item">What is a deadlock? How to prevent it?</li>
+        <li class="feature-item">Difference between TCP and UDP.</li>
+        <li class="feature-item">Explain normalization in DBMS.</li>
+        <li class="feature-item">Reverse a linked list (logic).</li>
+        <li class="feature-item">What is the difference between stack and queue?</li>
+      </ul>
+    </section>
+
+    <section id="resume">
+      <h2>Resume Improvement Tips</h2>
+      <ul class="feature-list">
+        <li class="feature-item">Keep your resume to one page.</li>
+        <li class="feature-item">Use strong action verbs like Developed, Built, Designed.</li>
+        <li class="feature-item">Highlight projects with clear outcomes (metrics where possible).</li>
+        <li class="feature-item">Include technical skills and certifications.</li>
+        <li class="feature-item">Avoid spelling/grammar mistakes.</li>
+        <li class="feature-item">Use clean and simple formatting.</li>
+      </ul>
+    </section>
+
+    <section id="resources">
+      <h2>Placement Resources</h2>
+      <ul class="feature-list">
+        <li class="feature-item"><a href="https://leetcode.com" target="_blank">LeetCode - Coding Practice</a></li>
+        <li class="feature-item"><a href="https://www.geeksforgeeks.org" target="_blank">GeeksforGeeks - Tutorials</a></li>
+        <li class="feature-item"><a href="https://www.hackerrank.com" target="_blank">HackerRank - Practice Problems</a></li>
+        <li class="feature-item"><a href="https://www.coursera.org" target="_blank">Coursera - Online Courses</a></li>
+        <li class="feature-item"><a href="https://www.udemy.com" target="_blank">Udemy - Technical Courses</a></li>
+      </ul>
+    </section>
+
+    <section id="practice">
+      <h2>Practice Tracker</h2>
+      <input id="practiceInput" class="chat-input" placeholder="Enter skill/topic you practiced" />
+      <button class="btn" onclick="addPractice()">Add</button>
+      <ul id="practiceList" class="feature-list"></ul>
+    </section>
+
+    <section id="chatbot">
+      <h2>Placement Chatbot</h2>
+      <div class="chat-box" id="chatBox"></div>
+      <input id="userInput" class="chat-input" placeholder="Ask something..." onkeydown="if(event.key==='Enter') sendMessage()" />
+      <div class="controls">
+        <button class="btn" onclick="sendMessage()">Send</button>
+        <button class="btn" onclick="clearChat()" style="background:#666">Clear</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const sectionMap = Array.from(document.querySelectorAll('section')).reduce((map, sec) => { map[sec.id]=sec; return map; }, {});
+    function show(id){ if(!sectionMap[id]) return; Object.values(sectionMap).forEach(s=>s.style.display='none'); sectionMap[id].style.display='block'; }
+
+    const responses=[
+      {pattern:/^(hi|hello|hey)\b/i,reply:'Hello! How can I help with your placement preparation?'},
+      {pattern:/\b(resume|cv)\b/i,reply:'A great resume is one page, clean, and highlights your projects and skills.'},
+      {pattern:/\b(aptitude|quant|quantitative)\b/i,reply:'Practice aptitude daily from RS Aggarwal, IndiaBix, or YouTube mocks.'},
+      {pattern:/\b(interview|hr|h r)\b/i,reply:'Be confident, know your projects, and prepare basic HR questions like strengths, weaknesses, and goals.'},
+      {pattern:/\b(project|projects)\b/i,reply:'You should have 1 major + 2 minor projects. Prefer real-world problem-solving ideas.'},
+      {pattern:/\b(dsa|coding|code|algorithm|algorithms)\b/i,reply:'Solve DSA questions consistently. Start with arrays, strings, recursion, sorting, searching.'},
+      {pattern:/\b(roadmap)\b/i,reply:'Choose a domain → Learn basics → Build projects → Practice DSA → Prepare interview topics.'},
+      {pattern:/\b(placement|job|apply)\b/i,reply:'Improve skills, build projects, practice DSA, and apply on LinkedIn/Naukri frequently.'},
+      {pattern:/\b(how|what|tips|advice)\b/i,reply:'Focus on DSA, projects, resume, aptitude, and communication skills for best placement results.'}
+    ];
+
+    function sanitizeText(t){return String(t);}
+    function appendChat(who,msg){const box=document.getElementById('chatBox');const row=document.createElement('div');row.className='chat-row';const whoEl=document.createElement('b');whoEl.textContent=who+':';const msgEl=document.createElement('span');msgEl.style.marginLeft='8px';msgEl.textContent=sanitizeText(msg);row.appendChild(whoEl);row.appendChild(msgEl);box.appendChild(row);box.scrollTop=box.scrollHeight;}
+
+    function sendMessage(){const inputEl=document.getElementById('userInput');const text=inputEl.value.trim();if(!text)return;appendChat('You',text);let reply="I'm not fully sure, but try asking about resume, aptitude, interviews, DSA, projects, or placements.";for(const r of responses){if(r.pattern.test(text)){reply=r.reply;break;}}setTimeout(()=>appendChat('Bot',reply),150);inputEl.value='';inputEl.focus();}
+    function clearChat(){document.getElementById('chatBox').innerHTML='';document.getElementById('userInput').value='';}
+
+    // Practice Tracker functions
+    function addPractice(){const val=document.getElementById('practiceInput').value.trim();if(!val)return;const li=document.createElement('li');li.textContent=val;document.getElementById('practiceList').appendChild(li);document.getElementById('practiceInput').value='';}
+
+    show('roadmap');
+  </script>
+</body>
+</html>
